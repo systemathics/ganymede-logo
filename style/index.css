@@ -1,0 +1,10 @@
+#stx-MainLogo {
+    display:block;
+    background: url('./systemathics-logo-squares.svg') no-repeat;
+    background-size: contain;
+    width: 23px;
+    height: 45px;
+    padding-left: 0px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
