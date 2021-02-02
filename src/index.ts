@@ -4,7 +4,6 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 
-
 import { Widget } from '@lumino/widgets';
 import { LabIcon } from '@jupyterlab/ui-components';
 import stxSvgstr from '../style/systemathics-logo-squares.svg';
@@ -22,7 +21,7 @@ const extension: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   requires: [ILabShell],
   activate: (app: JupyterFrontEnd, shell: ILabShell) => {
-    console.log('ganymede-logo activated')
+    console.log('ganymede-logo activated');
     const logo = new Widget();
     stxIcon.element({
       container: logo.node,
@@ -32,8 +31,10 @@ const extension: JupyterFrontEndPlugin<void> = {
       width: '16px'
     });
     logo.id = 'stx-MainLogo';
-    
-    shell.widgets('top').next().setHidden(true);
+    shell
+      .widgets('top')
+      .next()
+      .setHidden(true);
     shell.add(logo, 'top', { rank: 0 });
   }
 };
