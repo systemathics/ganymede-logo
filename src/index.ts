@@ -1,12 +1,10 @@
 import {
-	ILabShell,
+  ILabShell,
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 
-import { 
-  ISplashScreen, Dialog,
-} from '@jupyterlab/apputils';
+import { ISplashScreen, Dialog } from '@jupyterlab/apputils';
 import { Widget } from '@lumino/widgets';
 import { LabIcon } from '@jupyterlab/ui-components';
 import { Throttler } from '@lumino/polling';
@@ -50,7 +48,6 @@ const logo: JupyterFrontEndPlugin<void> = {
   }
 };
 
-
 /**
  * The command IDs used by the apputils plugin.
  */
@@ -66,7 +63,7 @@ const SPLASH_RECOVER_TIMEOUT = 12000;
 /**
  * Initialization data for the ganymede-splashscreen extension.
  */
-  const splash: JupyterFrontEndPlugin<ISplashScreen> = {
+const splash: JupyterFrontEndPlugin<ISplashScreen> = {
   id: 'ganymede-splashscreen:plugin',
   autoStart: true,
   provides: ISplashScreen,
@@ -79,53 +76,53 @@ const SPLASH_RECOVER_TIMEOUT = 12000;
       container: splash,
       position: 'fixed',
       top: '50%',
-      left : '50%',
+      left: '50%',
       right: '-50%',
       height: 'auto',
       width: '10%',
-      transform: 'translate(-50%, -50%)',
+      transform: 'translate(-50%, -50%)'
       //animation: 'rotation 4s infinite linear'
       //animation: 'beat .7s infinite alternate'
     });
-    splash.id = "stx-splash";
+    splash.id = 'stx-splash';
 
-        // Create debounced recovery dialog function.
-        let dialog: Dialog<unknown> | null;
-        const recovery = new Throttler(
-          async () => {
-            if (dialog) {
-              return;
-            }
-    
-            dialog = new Dialog({
-              title: 'Loading...',
-              body: `The loading screen is taking a long time. 
-    Would you like to clear the workspace or keep waiting?`,
-              buttons: [
-                Dialog.cancelButton({ label: 'Keep Waiting' }),
-                Dialog.warnButton({ label: 'Clear Workspace' })
-              ]
-            });
-    
-            try {
-              const result = await dialog.launch();
-              dialog.dispose();
-              dialog = null;
-              if (result.button.accept && commands.hasCommand(CommandIDs.reset)) {
-                return commands.execute(CommandIDs.reset);
-              }
-    
-              // Re-invoke the recovery timer in the next frame.
-              requestAnimationFrame(() => {
-                // Because recovery can be stopped, handle invocation rejection.
-                void recovery.invoke().catch(_ => undefined);
-              });
-            } catch (error) {
-              /* no-op */
-            }
-          },
-          { limit: SPLASH_RECOVER_TIMEOUT, edge: 'trailing' }
-        );
+    // Create debounced recovery dialog function.
+    let dialog: Dialog<unknown> | null;
+    const recovery = new Throttler(
+      async () => {
+        if (dialog) {
+          return;
+        }
+
+        dialog = new Dialog({
+          title: 'Loading...',
+          body: `The loading screen is taking a long time. 
+Would you like to clear the workspace or keep waiting?`,
+          buttons: [
+            Dialog.cancelButton({ label: 'Keep Waiting' }),
+            Dialog.warnButton({ label: 'Clear Workspace' })
+          ]
+        });
+
+        try {
+          const result = await dialog.launch();
+          dialog.dispose();
+          dialog = null;
+          if (result.button.accept && commands.hasCommand(CommandIDs.reset)) {
+            return commands.execute(CommandIDs.reset);
+          }
+
+          // Re-invoke the recovery timer in the next frame.
+          requestAnimationFrame(() => {
+            // Because recovery can be stopped, handle invocation rejection.
+            void recovery.invoke().catch(_ => undefined);
+          });
+        } catch (error) {
+          /* no-op */
+        }
+      },
+      { limit: SPLASH_RECOVER_TIMEOUT, edge: 'trailing' }
+    );
 
     // Return ISplashScreen.
     let splashCount = 0;
@@ -135,8 +132,7 @@ const SPLASH_RECOVER_TIMEOUT = 12000;
         splashCount++;
         console.log('adding');
         document.body.appendChild(splash);
-        
-        
+
         // Because recovery can be stopped, handle invocation rejection.
         void recovery.invoke().catch(_ => undefined);
 
@@ -163,8 +159,6 @@ const SPLASH_RECOVER_TIMEOUT = 12000;
 /**
  * Export the plugins as default.
  */
-const plugins: JupyterFrontEndPlugin<any>[] = [
-  logo,
-  splash
-];
+const plugins: JupyterFrontEndPlugin<any>[] = [logo, splash];
+
 export default plugins;
